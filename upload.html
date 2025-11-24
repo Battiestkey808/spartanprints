@@ -202,17 +202,17 @@
 <div class="container">
   <h2>Upload Your 3D Print File</h2>
   <p>
-    We accept STL, OBJ, and ZIP files. Submit your model and contact info,
+    We accept STL, OBJ, ZIP, SolidWorks, STEP, and IGES files. Submit your model and contact info,
     and we'll get back to you with a quote within 24 hours.
   </p>
 
   <div class="file-requirements">
-    <strong>Accepted formats:</strong> .stl, .obj, .zip (max 50MB)
+    <strong>Accepted formats:</strong> .stl, .obj, .zip, .sldprt, .sldasm, .step, .stp, .iges, .igs (max 50MB)
   </div>
 
   <form id="uploadForm">
     <div class="upload-area" id="uploadArea">
-      <input type="file" id="fileInput" accept=".stl,.obj,.zip" required>
+      <input type="file" id="fileInput" accept=".stl,.obj,.zip,.sldprt,.sldasm,.step,.stp,.iges,.igs" required>
       <div>
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -220,7 +220,7 @@
           <line x1="12" y1="3" x2="12" y2="15"></line>
         </svg>
         <p><strong>Click to upload</strong> or drag and drop</p>
-        <p style="font-size: 0.9rem; color: #666;">STL, OBJ, or ZIP files</p>
+        <p style="font-size: 0.9rem; color: #666;">STL, OBJ, ZIP, SolidWorks, STEP, or IGES files</p>
       </div>
     </div>
 
@@ -310,11 +310,11 @@
   function handleFile(file) {
     if (!file) return;
 
-    const validTypes = ['.stl', '.obj', '.zip'];
+    const validTypes = ['.stl', '.obj', '.zip', '.sldprt', '.sldasm', '.step', '.stp', '.iges', '.igs'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     
     if (!validTypes.includes(fileExt)) {
-      showError('Please upload a valid file type (STL, OBJ, or ZIP)');
+      showError('Please upload a valid file type (STL, OBJ, ZIP, SolidWorks, STEP, or IGES)');
       return;
     }
 
