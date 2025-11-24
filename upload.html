@@ -195,9 +195,7 @@
 <body>
 <header>
   <a href="index.html" style="text-decoration: none; color: white;">
-    
     <h1>Spartan Prints</h1>
- 
   </a>
   <a href="index.html" class="back-btn">← Back to Home</a>
 </header>
@@ -268,7 +266,7 @@
   </form>
 </div>
 <footer>
-  © 2025 SpartanPrints. All rights reserved.
+  © 2025 Spartan Prints. All rights reserved.
 </footer>
 
 <script>
@@ -347,35 +345,48 @@
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('name', document.getElementById('name').value);
-    formData.append('email', document.getElementById('email').value);
-    formData.append('phone', document.getElementById('phone').value);
-    formData.append('notes', document.getElementById('notes').value);
-
     submitBtn.disabled = true;
     loading.style.display = 'block';
     hideMessages();
 
     try {
-      // OPTION 1: Using FormSubmit.co (easiest for GitHub Pages)
-      // Replace YOUR_EMAIL with your actual email
-      const response = await fetch('https://formsubmit.co/ajax/YOUR_EMAIL@example.com', {
+      // Convert file to base64
+      const base64Data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(selectedFile);
+      });
+
+      // Prepare form data
+      const formData = new URLSearchParams();
+      formData.append('name', document.getElementById('name').value);
+      formData.append('email', document.getElementById('email').value);
+      formData.append('phone', document.getElementById('phone').value);
+      formData.append('notes', document.getElementById('notes').value);
+      formData.append('fileName', selectedFile.name);
+      formData.append('fileType', selectedFile.type);
+      formData.append('fileData', base64Data);
+
+      // Send to Google Apps Script
+      const response = await fetch('https://script.google.com/macros/s/AKfycbw-vFhxyOxh_D2sDt8J4mCTU1f2MpDr7G7eWyXKIuTVZImbNuzs0SL3bv1JJiTiM3aB/exec', {
         method: 'POST',
         body: formData
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         showSuccess(document.getElementById('email').value);
         form.reset();
         fileInfo.classList.remove('show');
         selectedFile = null;
       } else {
-        throw new Error('Upload failed');
+        throw new Error(result.message || 'Upload failed');
       }
     } catch (error) {
-      showError('Upload failed. Please try again or email us directly.');
+      console.error('Upload error:', error);
+      showError('Upload failed. Please try again or email us directly at sjsuspartanprints@gmail.com');
     } finally {
       loading.style.display = 'none';
       submitBtn.disabled = false;
