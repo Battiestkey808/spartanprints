@@ -1,0 +1,20 @@
+{
+  "name": "spartanprints",
+  "compatibility_date": "2025-11-24",
+  "assets": {
+    "directory": "./"
+  }
+}
+```
+
+5. Click **"Commit changes"**
+
+---
+
+## **Then Update Deploy Command in Cloudflare:**
+
+Go back to Cloudflare Pages settings:
+
+**Deploy command:**
+```
+npx wrangler deploy
