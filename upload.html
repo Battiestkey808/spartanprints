@@ -22,6 +22,11 @@
     h1 {
       margin: 0;
       font-size: 2.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    h1:hover {
+      opacity: 0.9;
     }
     .back-btn {
       position: absolute;
@@ -189,7 +194,9 @@
 </head>
 <body>
 <header>
-  <h1>Spartan Prints</h1>
+  <a href="index.html" style="text-decoration: none; color: white;">
+    <h1>Spartan Prints</h1>
+  </a>
   <a href="index.html" class="back-btn">← Back to Home</a>
 </header>
 <div class="container">
@@ -259,7 +266,7 @@
   </form>
 </div>
 <footer>
-  © 2025 Spartan Prints. All rights reserved.
+  © 2025 SpartanPrints. All rights reserved.
 </footer>
 
 <script>
