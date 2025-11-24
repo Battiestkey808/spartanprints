@@ -17,10 +17,39 @@
       color: white;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
     h1 {
       margin: 0;
       font-size: 2.5rem;
+    }
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 8px 16px;
+      border: 2px solid white;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+    .back-btn:hover {
+      background: white;
+      color: #1e3a8a;
+    }
+    @media (max-width: 600px) {
+      .back-btn {
+        position: static;
+        transform: none;
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
     }
     .container {
       max-width: 700px;
@@ -161,6 +190,7 @@
 <body>
 <header>
   <h1>SpartanPrints</h1>
+  <a href="index.html" class="back-btn">← Back to Home</a>
 </header>
 <div class="container">
   <h2>Upload Your 3D Print File</h2>
