@@ -203,7 +203,7 @@
   <h2>Upload Your 3D Print File</h2>
   <p>
     We accept STL, OBJ, ZIP, SolidWorks, STEP, and IGES files. Submit your model and contact info,
-    and we'll get back to you within the next few business days.
+    and we'll get back to you with a quote within 24 hours.
   </p>
 
   <div class="file-requirements">
@@ -255,14 +255,14 @@
     </div>
 
     <div class="success-message" id="successMessage">
-      ✓ File uploaded successfully! We'll contact you at <span id="confirmEmail"></span> within the next few business days.
+      ✓ File uploaded successfully! We'll contact you at <span id="confirmEmail"></span> within 24 hours.
     </div>
 
     <div class="error-message" id="errorMessage">
       ✗ <span id="errorText"></span>
     </div>
 
-    <button type="submit" class="btn" id="submitBtn">Submit</button>
+    <button type="submit" class="btn" id="submitBtn">Submit for Quote</button>
   </form>
 </div>
 <footer>
@@ -294,17 +294,32 @@
   // Drag and drop
   uploadArea.addEventListener('dragover', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.add('dragover');
   });
 
-  uploadArea.addEventListener('dragleave', () => {
+  uploadArea.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    uploadArea.classList.add('dragover');
+  });
+
+  uploadArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.remove('dragover');
   });
 
   uploadArea.addEventListener('drop', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.remove('dragover');
-    handleFile(e.dataTransfer.files[0]);
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      handleFile(files[0]);
+    }
   });
 
   function handleFile(file) {
@@ -340,6 +355,9 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    console.log('Form submitted');
+    console.log('Selected file:', selectedFile);
+    
     if (!selectedFile) {
       showError('Please select a file to upload');
       return;
@@ -350,14 +368,24 @@
     hideMessages();
 
     try {
+      console.log('Converting file to base64...');
+      
       // Convert file to base64
       const base64Data = await new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
+        reader.onload = () => {
+          console.log('File read successfully');
+          resolve(reader.result.split(',')[1]);
+        };
+        reader.onerror = (error) => {
+          console.error('FileReader error:', error);
+          reject(error);
+        };
         reader.readAsDataURL(selectedFile);
       });
 
+      console.log('Preparing form data...');
+      
       // Prepare form data
       const formData = new URLSearchParams();
       formData.append('name', document.getElementById('name').value);
@@ -368,13 +396,18 @@
       formData.append('fileType', selectedFile.type);
       formData.append('fileData', base64Data);
 
+      console.log('Sending to Google Apps Script...');
+
       // Send to Google Apps Script
       const response = await fetch('https://script.google.com/macros/s/AKfycbw-vFhxyOxh_D2sDt8J4mCTU1f2MpDr7G7eWyXKIuTVZImbNuzs0SL3bv1JJiTiM3aB/exec', {
         method: 'POST',
         body: formData
       });
 
+      console.log('Response received:', response);
+      
       const result = await response.json();
+      console.log('Result:', result);
 
       if (result.success) {
         showSuccess(document.getElementById('email').value);
