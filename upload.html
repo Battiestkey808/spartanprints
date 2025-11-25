@@ -249,19 +249,18 @@
 
     <div class="form-group">
       <label for="quantity">Quantity</label>
-      <input type="number" id="quantity" min="1" value="1" placeholder="1">
+      <input type="number" id="quantity" min="1" max="100" value="1" placeholder="1">
     </div>
 
     <details style="margin: 20px 0; cursor: pointer;">
       <summary style="font-weight: bold; color: #1e3a8a; padding: 10px; background: #f0f7ff; border-radius: 8px; user-select: none;">
-         Advanced Options (optional)
+          Advanced Options (optional)
       </summary>
       <div style="margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 8px;">
         
         <div class="form-group">
           <label for="material">Material Preference</label>
           <select id="material" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
-            <option value="">No preference</option>
             <option value="PLA">PLA (Standard)</option>
             <option value="ABS">ABS (Durable)</option>
             <option value="PETG">PETG (Strong & Flexible)</option>
